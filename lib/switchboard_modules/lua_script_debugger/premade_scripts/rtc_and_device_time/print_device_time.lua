@@ -23,12 +23,12 @@
 print("Read the real-time-clock RTC, print the timestamp.")
 -- Read the HARDWARE_INSTALLED register to get the RTC module status
 local hwinstalled = MB.readName("HARDWARE_INSTALLED")
--- The third bit in hardware correlates to the RTC module status
+-- The third bit in hwinstalled correlates to the RTC module status
 -- If this third bit is not 1, the RTC module is not installed, exit the script
 if(bit.band(hwinstalled, 4) ~= 4) then
   print("This Lua script requires a Real-Time Clock (RTC), but an RTC is not detected. These modules are only preinstalled on the T7-Pro, and cannot be added to the T7 or T4. Stopping Script")
   -- Write a 0 to LUA_RUN to stop the script
-  MB.W(6000, 1, 0)
+  MB.writeName("LUA_RUN", 0)
 end
 
 -- Array of UINT16 time data
@@ -57,12 +57,12 @@ while true do
       timetable[5],
       timetable[6])
     )
-    -- print("Year: ", timetable[1])
-    -- print("Month: ", timetable[2])
-    -- print("Day: ", timetable[3])
-    -- print("Hour: ", timetable[4])
-    -- print("Minute:", timetable[5])
-    -- print("Second:", timetable[6])
-    -- print("\n")
+    print("Year: ", timetable[1])
+    print("Month: ", timetable[2])
+    print("Day: ", timetable[3])
+    print("Hour: ", timetable[4])
+    print("Minute:", timetable[5])
+    print("Second:", timetable[6])
+    print("\n")
   end
 end

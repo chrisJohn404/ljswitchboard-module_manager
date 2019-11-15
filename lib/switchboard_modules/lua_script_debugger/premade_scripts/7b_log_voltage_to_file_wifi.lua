@@ -2,7 +2,7 @@
     Name: 7b_log_voltage_to_file_wifi.lua
     Desc: This example shows how to log voltage measurements to file if
           communicating over WiFi (WiFi needs 5s or more to initialize)
-without comm
+          without comm
     Note: Requires an SD Card installed inside the T7 or T7-Pro
 
           This example requires firmware 1.0282 (T7)

@@ -2,6 +2,8 @@
     Name: gyro-l3gd20h.lua
     Desc: This is an example that uses the L3GD20H Gyroscope on the I2C Bus on
           EIO4(SCL) and EIO5(SDA)
+    Note: I2C examples assume power is provided by a LJTick-LVDigitalIO at 3.3V
+          (a DAC set to 3.3V or a DIO line could also be used for power)
 --]]
 
 --Outputs data to Registers:
@@ -28,10 +30,10 @@ SLAVE_ADDRESS = 0x6B
 --Configure the I2C Bus
 I2C.config(13, 12, 65516, 0, SLAVE_ADDRESS, 0)
 local addrs = I2C.search(0, 127)
-local addrsLen = table.getn(addrs)
+local addrslen = table.getn(addrs)
 local found = 0
 -- Verify that the target device was found
-for i=1, addrsLen do
+for i=1, addrslen do
   if addrs[i] == SLAVE_ADDRESS then
     print("I2C Slave Detected")
     found = 1

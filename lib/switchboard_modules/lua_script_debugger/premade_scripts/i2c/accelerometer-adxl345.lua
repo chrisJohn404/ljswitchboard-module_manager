@@ -2,6 +2,8 @@
     Name: accelerometer-adxl345.lua
     Desc: This is an example that uses the ADXL345 Accelerometer on the
           I2C Bus on EIO4(SCL) and EIO5(SDA)
+    Note: I2C examples assume power is provided by a LJTick-LVDigitalIO at 3.3V
+          (a DAC set to 3.3V or a DIO line could also be used for power)
 --]]
 
 --Outputs data to Registers:
@@ -25,9 +27,7 @@ end
 
 local SLAVE_ADDRESS = 0x53
 
--- Use EIO3 for power
-MB.writeName("EIO3", 1)
--- Use EIO2 to pull up CS
+-- Use EIO2 to pull up the CS line
 MB.writeName("EIO2", 1)
 -- Use EOI5(DIO13) for SDA and EIO4(DIO12) for SCL
 I2C.config(13, 12, 65516, 0, SLAVE_ADDRESS, 0)

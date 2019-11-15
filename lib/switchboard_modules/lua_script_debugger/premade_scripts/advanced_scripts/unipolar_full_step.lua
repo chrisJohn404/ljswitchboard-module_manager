@@ -7,6 +7,7 @@
           with this script:
             https://labjack.com/support/app-notes/digital-IO/stepper-motor-controller
 --]]
+
 print("Use the following registers:")
 print("46080: Target Position (steps)")
 print("46082: Current Position (steps)")

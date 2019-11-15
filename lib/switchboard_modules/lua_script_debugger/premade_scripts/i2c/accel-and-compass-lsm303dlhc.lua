@@ -4,6 +4,9 @@
           Magnetometer on the I2C Bus on EIO4(SCL) and EIO5(SDA)
     Note: This example is a combination of the LSM303 Accelerometer and
           LSM303 Magnetometer Lua scripts
+
+          I2C examples assume power is provided by a LJTick-LVDigitalIO at 3.3V
+          (a DAC set to 3.3V or a DIO line could also be used for power)
 --]]
 
 --Outputs data to Registers:
