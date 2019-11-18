@@ -1,5 +1,5 @@
 --[[
-    Name: 9_spi_example.lua
+    Name: 8_spi_example.lua
     Desc: This example sends out a packet of data over SPI and reads it back
     Note: If the packet received matches the packet sent, SPI is working
           properly. Otherwise, there may be some issues with the SPI circuitry
@@ -47,6 +47,7 @@ local dataselect = 2
 -- Configure an interval of 100ms
 LJ.IntervalConfig(0, 100)
 -- Run the program in an infinite loop
+
 while true do
   -- If an interval is done
   if LJ.CheckInterval(0) then

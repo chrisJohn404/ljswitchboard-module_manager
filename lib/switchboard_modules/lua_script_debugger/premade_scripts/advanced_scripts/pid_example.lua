@@ -1,5 +1,5 @@
 --[[
-    Name: 13_pid_example.lua
+    Name: pid_example.lua
     Desc: This is a PID example script that sets a DAC0 output using AIN2 for
           feedback
     Note: Gets a setpoint from a host computer.  Host computer writes the new
@@ -61,6 +61,7 @@ while true do
     print("AIN2 =", vin, "V")
     err = setpoint - vin
     print("The error is ", err)
+
     intterm = intterm + ki * err
     -- Limit the integral term
     if intterm > maxout then
@@ -69,6 +70,7 @@ while true do
       intterm = minout
     end
     print("The Int term is ", intterm)
+
     difterm = vin - lastin
     print("The Diff term is ", difterm)
     vout = kp * err + intterm - kd * difterm

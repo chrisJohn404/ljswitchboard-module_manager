@@ -34,8 +34,6 @@ local count = 0
 local delimiter = ","
 local strdate = ""
 local strvoltage = ""
-
-
 local table = {}
 table[1] = 0    --year
 table[2] = 0    --month
@@ -43,7 +41,6 @@ table[3] = 0    --day
 table[4] = 0    --hour
 table[5] = 0    --minute
 table[6] = 0    --second
-
 -- Create and open a file for write access
 local file = io.open(filename, "w")
 -- Make sure that the file was opened properly.
@@ -53,7 +50,6 @@ else
   -- If the file was not opened properly we probably have a bad SD card.
   print("!! Failed to open file on uSD Card !!")
 end
-
 -- Make sure analog is on
 MB.writeName("POWER_AIN", 1)
 -- Configure an interval of 1000ms
@@ -91,6 +87,5 @@ file = io.open(filename, "r")
 local line = file:read("*all")
 file:close()
 print(line)
-
 print("Finished Script")
 MB.W(6000, 1, 0);

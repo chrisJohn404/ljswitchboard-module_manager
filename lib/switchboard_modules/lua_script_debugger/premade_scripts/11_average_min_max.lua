@@ -1,5 +1,5 @@
 --[[
-    Name: 14_average_min_max.lua
+    Name: 11_average_min_max.lua
     Desc: Example program that samples an analog input at a set frequency for a
           certain number of samples. It takes the average, minimum, and maximum
           of sampled data and prints it to the console as well as saving them
@@ -26,7 +26,6 @@ elseif devtype == 7 then
 end
 -- Ensure analog is on
 MB.writeName("POWER_AIN", 1)
-
 local alldata = 0
 local iter = 0
 -- Initialize min to a large value so the first data value is set to min
@@ -60,9 +59,9 @@ while iter < numscans do
     alldata = newdata + alldata
   end
 end
+
 -- Calculate the average of all of the acquired data
 local avg = alldata / numscans
-
 -- Write the average, min, and max values to USER RAM
 MB.writeName("USER_RAM0_F32",avg)
 MB.writeName("USER_RAM1_F32",maxv)
@@ -70,7 +69,6 @@ MB.writeName("USER_RAM2_F32",minv)
 print("Average voltage: ",avg)
 print("Min voltage: ",minv)
 print("Max voltage: ",maxv)
-
 print("")
 print("Finished")
 -- Writing 0 to LUA_RUN stops the script
