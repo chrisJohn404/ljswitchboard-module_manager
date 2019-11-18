@@ -3,6 +3,9 @@
     Desc: This is an example that uses the TCS34725 Color Sensor on the I2C Bus
           on EIO4(SCL) and EIO5(SDA), LED pin to FIO6
     Note: See the TCS34725 datasheet for more information
+
+          I2C examples assume power is provided by a LJTick-LVDigitalIO at 3.3V
+          (a DAC set to 3.3V or a DIO line could also be used for power)
 --]]
 
 --Outputs data to Registers:
