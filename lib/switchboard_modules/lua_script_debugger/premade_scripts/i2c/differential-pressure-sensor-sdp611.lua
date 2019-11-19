@@ -12,10 +12,12 @@
 --]]
 
 
-
--- This function will convert the binary values from the SDP611 to a pressure. The binary
--- data consists of two bytes which must be joined and interpreted as 2's complement. The
--- resulting signed binary value is then converted to pascals.
+-------------------------------------------------------------------------------
+-- Desc: This function will convert the binary values from the SDP611 to a
+--       pressure. The binary data consists of two bytes which must be joined
+--       and interpreted as 2's complement. The resulting signed binary value
+--       is then converted to pascals.
+-------------------------------------------------------------------------------
 function bin_to_pa(upperbyte,lowerbyte)
   local value = 0
   -- Join the two bytes
