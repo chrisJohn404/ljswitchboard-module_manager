@@ -5,7 +5,7 @@
     Note: The LM34CAZ outputs an analog voltage equal to 10mV/°F
           At 70 degrees F, the output will be 0.70mV, so the conversion is easy
 
-          We recommend connecting a 10kohm resistor between Vout and GND to
+          We recommend connecting a 10kΩ resistor between Vout and GND to
           keep the signal from becoming unstable
 
           For more information on the LM34CAZ see:
