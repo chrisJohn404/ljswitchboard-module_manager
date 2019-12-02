@@ -90,7 +90,6 @@ while running do
     end
   end
 end
-
 print("Script Finished")
 -- Writing 0 to LUA_RUN stops the script
 MB.writeName("LUA_RUN", 0)

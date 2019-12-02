@@ -13,6 +13,8 @@
 --]]
 
 print("Sampling average/min/max: Read AIN1 at set rate for certain number of samples. Outputs average, minimum, and maximum")
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Ensure analog is on
 MB.writeName("POWER_AIN", 1)
 local devtype = MB.readName("PRODUCT_ID")

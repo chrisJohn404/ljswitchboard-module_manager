@@ -24,6 +24,8 @@ print("Transfer an array of ordered information to/from an external computer usi
 -- add this USER_RAM_FIFO1_DATA_F32 register to the active watch area, and
 -- view each element coming out in sequence at the update rate of the software.
 
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 local f32out= {}
 f32out[1] = 10.0
 f32out[2] = 20.1
@@ -40,7 +42,6 @@ local fifo1bytes = numvalsfio1*bytesperval
 MB.writeName("USER_RAM_FIFO0_ALLOCATE_NUM_BYTES", fifo0bytes)
 -- Allocate 20 bytes for FIFO1 by writing to USER_RAM_FIFO1_NUM_BYTES_IN_FIFO
 MB.writeName("USER_RAM_FIFO1_ALLOCATE_NUM_BYTES", fifo1bytes)
-
 -- Configure an interval of 2000ms
 LJ.IntervalConfig(0, 2000)
 
@@ -72,7 +73,6 @@ while true do
       f32in[i] = inval
       print ("Next Value FIFO1: ", inval)
     end
-
     print ("\n")
   end
 end
