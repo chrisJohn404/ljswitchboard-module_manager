@@ -25,6 +25,13 @@
 --Y gyro = 46014
 --Z gyro = 46016
 
+-- Address of the magnetometer
+local MAG_ADDRESS = 0x1E
+-- Address of the accelerometer
+local ACCEL_ADDRESS = 0x19
+-- Address of the gyroscope
+local GYRO_ADDRESS = 0x6B
+
 -------------------------------------------------------------------------------
 --  Desc: Returns a number adjusted using the conversion factor
 --        Use 1 if not desired
@@ -38,13 +45,6 @@ local function convert_16_bit(msb, lsb, conv)
   end
   return res
 end
-
--- Address of the magnetometer
-local MAG_ADDRESS = 0x1E
--- Address of the accelerometer
-local ACCEL_ADDRESS = 0x19
--- Address of the gyroscope
-local GYRO_ADDRESS = 0x6B
 
 -- Configure the I2C Bus
 I2C.config(13, 12, 65516, 0, MAG_ADDRESS, 0)

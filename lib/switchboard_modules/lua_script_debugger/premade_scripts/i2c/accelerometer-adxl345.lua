@@ -11,6 +11,8 @@
 --Y accel = 46002
 --Z accel = 46004
 
+local SLAVE_ADDRESS = 0x53
+
 -------------------------------------------------------------------------------
 --  Desc: Returns a number adjusted using the conversion factor
 --        Use 1 if not desired
@@ -25,7 +27,6 @@ local function convert_16_bit(msb, lsb, conv)
   return res
 end
 
-local SLAVE_ADDRESS = 0x53
 
 -- Use EIO2 to pull up the CS line
 MB.writeName("EIO2", 1)

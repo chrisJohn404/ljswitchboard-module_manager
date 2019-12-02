@@ -7,6 +7,8 @@
           This example requires firmware 1.0282 (T7) or 1.0023 (T4)
 --]]
 
+-- Disable truncation warnings (truncation is not a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Set interval timer 0 with a 1000ms interval
 LJ.IntervalConfig(0, 1000)
 -- Set interval timer 1 with a 5s interval

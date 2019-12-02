@@ -11,6 +11,8 @@
 --Y = 46008
 --Z = 46010
 
+local SLAVE_ADDRESS = 0x19
+
 -------------------------------------------------------------------------------
 --  Desc: Returns a number adjusted using the conversion factor
 --        Use 1 if not desired
@@ -25,7 +27,6 @@ local function convert_16_bit(msb, lsb, conv)
   return res
 end
 
-SLAVE_ADDRESS = 0x19
 
 -- Configure the I2C Bus
 I2C.config(13, 12, 65516, 0, SLAVE_ADDRESS, 0)

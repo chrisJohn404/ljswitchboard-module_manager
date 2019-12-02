@@ -63,6 +63,5 @@ while true do
       state = "pulseUpdate"
     end
   end
-
   lastval = inval
 end
