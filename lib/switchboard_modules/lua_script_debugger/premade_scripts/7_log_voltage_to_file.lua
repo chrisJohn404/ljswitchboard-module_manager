@@ -9,6 +9,8 @@
 --]]
 
 print("Log voltage to file.  Voltage measured on AIN1.  Store value every 1 second for 10 seconds")
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Read information about the hardware installed
 local hardware = MB.readName("HARDWARE_INSTALLED")
 local passed = 1
@@ -60,7 +62,7 @@ while true do
   if LJ.CheckInterval(0) then
     voltage = MB.readName("AIN1")
     -- Read the RTC timestamp (T7-Pro only)
-    table, error = MB.RA(61510, 0, 6)
+    table, error = MB.readNameArray("RTC_TIME_CALENDAR", 6)
     print("AIN1:", voltage, "V")
     strdate = string.format(
       "%04d/%02d/%02d %02d:%02d.%02d",

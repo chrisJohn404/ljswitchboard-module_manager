@@ -17,6 +17,8 @@
 --]]
 
 print ("Read the ROM ID of a single DS18B20 1-Wire sensor.")
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Use the EIO0 (DIO8) register for the data line
 local sensorpin = 8
 -- The sensor registration number stored in ROM is 64-bits, so it requires 4
@@ -37,7 +39,7 @@ MB.writeName("ONEWIRE_GO", 1)
 -- ONEWIRE_SEARCH_RESULT_L returns the lower 32 bits of the search result
 -- These registers are next to each other, so MB.RA can be used to read both
 -- and get the entire ROM data
-rom, error = MB.RA(5328, 0, 4)
+rom, error = MB.readNameArray("ONEWIRE_SEARCH_RESULT_H", 4, 0)
 print("MW:", rom[1],"UW:", rom[2],"HW:", rom[3],"LW:", rom[4])
 -- Write down these 4 numbers so that you can directly address this sensor later.
 -- See the "DS18B20 Temperature (1-Wire)" sensor example for details on

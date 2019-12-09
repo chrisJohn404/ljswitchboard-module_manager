@@ -29,6 +29,8 @@ SLAVE_ADDRESS = 0x6B
 
 --Configure the I2C Bus
 I2C.config(13, 12, 65516, 0, SLAVE_ADDRESS, 0)
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 local addrs = I2C.search(0, 127)
 local addrslen = table.getn(addrs)
 local found = 0
@@ -58,6 +60,7 @@ I2C.write({0x24, 0x00})
 I2C.write({0x20, 0xBF})
 -- Configure a 200ms interval
 LJ.IntervalConfig(0, 200)
+local ramaddress = MB.nameToAddress("USER_RAM6_F32")
 while true do
   -- If an interval is done
   if LJ.CheckInterval(0) then
@@ -71,7 +74,7 @@ while true do
     -- Get the gyro data and store it in USER_RAM
     for i=0, 2 do
       table.insert(gyrodata, convert_16_bit(rawgyrodata[1+i*2], rawgyrodata[2+i*2], (0x7FFF/2000)))
-      MB.W(46012+i*2, 3, gyrodata[i+1])
+      MB.W(ramaddress+i*2, 3, gyrodata[i+1])
     end
     print("X: "..gyrodata[1])
     print("Y: "..gyrodata[2])

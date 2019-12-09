@@ -5,6 +5,8 @@
 --]]
 
 print("Blink the COMM and Status LEDs at 1 Hz.")
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 local ledstatus = 0
 local i = 0
 local numiterations = 5

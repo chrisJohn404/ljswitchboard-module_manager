@@ -18,12 +18,16 @@
 print("Communicate with a MaxBotix MB1000 ultrasonic range sensor using PWM.")
 -- These settings could be configured outside of script, and saved as defaults
 -- Configure the clock to provide the maximum measurable period
-
+local roll = 0
+local rolltable = {}
+rolltable[1] = roll / 256
+rolltable[2] = roll - rolltable[1]*256
 -- Disable the clock during configuration
 MB.writeName("DIO_EF_CLOCK0_ENABLE", 0)
 -- Set the divisor to 1, PWM resolution is 12.5ns
 MB.writeName("DIO_EF_CLOCK0_DIVISOR", 1)
-MB.writeName("DIO_EF_CLOCK0_ROLL_VALUE", 0)
+-- Write the clock 0 roll value as 2 UINT16s to avoid potential truncation
+MB.writeNameArray("DIO_EF_CLOCK0_ROLL_VALUE", 2, rolltable, 0)
 -- Enable the clock
 MB.writeName("DIO_EF_CLOCK0_ENABLE", 1)
 local pinoffset = 0
@@ -37,22 +41,26 @@ elseif devtype == 4 then
   -- Use FIO4 for PWM
 	pinoffset = 8
 end
+local efenableaddr = MB.nameToAddress("DIO0_EF_ENABLE")
+local efindexaddr = MB.nameToAddress("DIO0_EF_INDEX")
+local efoptionsaddr = MB.nameToAddress("DIO0_EF_OPTIONS")
+local efreadaddr = MB.nameToAddress("DIO0_EF_READ_A_F_AND_RESET")
 -- Disable the DIO extended features during configuration
-MB.W(44000+pinoffset, 1, 0)
+MB.W(efenableaddr+pinoffset, 1, 0)
 -- Set DIO_EF_INDEX to use PWM (index = 5)
-MB.W(44100+pinoffset, 1, 5)
+MB.W(efindexaddr+pinoffset, 1, 5)
 -- Use clock 0 for the clock source
-MB.W(44200+pinoffset, 1, 0)
+MB.W(efoptionsaddr+pinoffset, 1, 0)
 -- Enable the DIO_EF system
-MB.W(44000+pinoffset, 1, 1)
+MB.W(efenableaddr+pinoffset, 1, 1)
 -- Configure a 333ms interval
 LJ.IntervalConfig(0, 333)
 
 while true do
   -- If an interval is done
   if LJ.CheckInterval(0) then
-    -- DIO0_EF_READ_A_F_AND_RESET gets the measured high time in seconds
-    local pulsewidth = MB.R(3600+pinoffset, 3)
+    -- Get the measured high time in seconds and reset
+    local pulsewidth = MB.R(efreadaddr+pinoffset, 3)
     -- Apply the scale factor to get the range in inches
     local range = pulsewidth / 0.000147
     print("range: ", range, "inches")

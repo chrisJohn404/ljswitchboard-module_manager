@@ -12,6 +12,8 @@
 print("Basic UART example.")
 print("Please connect a jumper wire between FIO0 and FIO1 (FIO4 and FIO5 on T4)")
 print("")
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Assume the device being used is a T7, use FIO1 for the RX pin
 local rxpin = 1
 -- Use FIO0 for the TX pin

@@ -19,6 +19,9 @@
 print("Example for servo motor using PWM output.")
 
 local roll = 25000
+local rolltable = {}
+rolltable[1] = roll / 256
+rolltable[2] = roll - rolltable[1]*256
 -- Duty cycle as a percentage
 local dutycycle = 10
 print("duty cycle:", dutycycle)
@@ -26,8 +29,8 @@ print("duty cycle:", dutycycle)
 MB.writeName("DIO_EF_CLOCK0_ENABLE", 0)
 -- Configure the clock 0 divisor
 MB.writeName("DIO_EF_CLOCK0_DIVISOR", 8)
--- Configure the clock 0 roll value
-MB.writeName("DIO_EF_CLOCK0_ROLL_VALUE", roll)
+-- Write the clock 0 roll value as 2 UINT16s to avoid potential truncation
+MB.writeNameArray("DIO_EF_CLOCK0_ROLL_VALUE", 2, rolltable, 0)
 -- Enable clock 0
 MB.writeName("DIO_EF_CLOCK0_ENABLE", 1)
 local pinoffset = 0
@@ -41,12 +44,16 @@ elseif devtype == 4 then
   -- Use FIO6 for PWM
 	pinoffset = 12
 end
+local efenableaddr = MB.nameToAddress("DIO0_EF_ENABLE")
+local efindexaddr = MB.nameToAddress("DIO0_EF_INDEX")
+local efoptionsaddr = MB.nameToAddress("DIO0_EF_OPTIONS")
+local efconfigaddr = MB.nameToAddress("DIO0_EF_CONFIG_A")
 -- Disable DIO#_EF_ENABLE during configuration
-MB.W(44000+pinoffset, 1, 0)
+MB.W(efenableaddr+pinoffset, 1, 0)
 -- Configure the PWM feature
-MB.W(44100+pinoffset, 1, 0)
+MB.W(efindexaddr+pinoffset, 1, 0)
 -- Use clock 0 for the clock source
-MB.W(44200+pinoffset, 1, 0)
+MB.W(efoptionsaddr+pinoffset, 1, 0)
 local processing = 0
 -- Configure a 500ms interval
 LJ.IntervalConfig(0, 500)
@@ -55,16 +62,16 @@ while processing~=3 do
   -- If an interval is done
   if LJ.CheckInterval(0) then
     if processing == 0 then
-      -- Configure duty cycle (DIO#_EF_CONFIG_A) to be: 50%
-      MB.W(44300+pinoffset, 1, roll/((1/dutycycle)*100))
+      -- Configure duty cycle to be: 50%
+      MB.W(efconfigaddr+pinoffset, 1, roll/((1/dutycycle)*100))
       -- Enable the EF system; the PWM wave is now being output
-      MB.W(44000+pinoffset, 1, 1)
+      MB.W(efenableaddr+pinoffset, 1, 1)
       print("duty cycle:", dutycycle+10)
       processing = 1
       -- If in the "off" state
     elseif processing == 1 then
       -- Disable FIO after 3 seconds to set the servo position
-      MB.W(44000+pinoffset, 1, 0)
+      MB.W(efenableaddr+pinoffset, 1, 0)
       -- Set a new duty cycle to 10% more than previous
       dutycycle=dutycycle+10
       processing = 0

@@ -24,6 +24,8 @@
 
 SLAVE_ADDRESS = 0x3E
 
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Configure the I2C Bus
 I2C.config(13, 12, 65516, 0, SLAVE_ADDRESS, 0)
 local addrs = I2C.search(0, 127)

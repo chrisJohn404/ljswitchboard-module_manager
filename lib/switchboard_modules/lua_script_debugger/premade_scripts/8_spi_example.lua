@@ -54,12 +54,10 @@ while true do
     -- Get the number of data bytes
     local datasize = table.getn(data[dataselect])
     MB.writeName("SPI_NUM_BYTES", datasize)
-    -- Load the selected data into DATA_TX
-    MB.WA(5010, 99, datasize, data[dataselect])
+    MB.writeNameArray("SPI_DATA_TX", datasize, data[dataselect])
     -- Start an SPI transaction
     MB.writeName("SPI_GO", 1)
-    -- Read data from DATA_RX
-    local rxdata = MB.RA(5050, 99, datasize)
+    local rxdata = MB.readNameArray("SPI_DATA_RX", datasize)
     -- Compare the data
     local pass = 1
     for i=1,datasize do

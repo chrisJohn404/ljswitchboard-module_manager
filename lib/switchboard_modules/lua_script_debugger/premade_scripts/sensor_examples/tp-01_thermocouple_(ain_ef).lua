@@ -17,6 +17,8 @@
 --]]
 
 print("Grab the temperature from a TP-01 thermocouple.")
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Check that this is a T7
 local devtype = MB.readName("PRODUCT_ID")
 if devtype == 4 then

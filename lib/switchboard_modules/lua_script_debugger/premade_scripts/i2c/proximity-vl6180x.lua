@@ -46,7 +46,8 @@ si[28] = {0x01, 0xa7, 0x1f}
 si[29] = {0x00, 0x30, 0x00}
 -- Configure the I2C Bus
 I2C.config(13, 12, 65516, 0, SLAVE_ADDRESS, 0)
-
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 local addrs = I2C.search(0, 127)
 local addrslen = table.getn(addrs)
 local found = 0

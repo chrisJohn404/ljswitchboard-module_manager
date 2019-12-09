@@ -14,6 +14,8 @@
 --]]
 
 print("Get the GPS latitude & longitude from a FGPMMOPA6H Adafruit GPS Module.")
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 local data = {}
 local temp = 0
 local temp2 = ""

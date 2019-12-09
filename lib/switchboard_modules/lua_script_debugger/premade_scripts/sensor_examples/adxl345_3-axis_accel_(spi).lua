@@ -73,42 +73,38 @@ local txdata = {}
 txdata[1] = 0xC0
 txdata[2] = 0x00
 MB.writeName("SPI_NUM_BYTES", numbytes)
---SPI_DATA_TX address is 5010, type is 99(byte)
-error = MB.WA(5010, 99, numbytes, txdata)
+error = MB.writeNameArray("SPI_DATA_TX", numbytes, txdata)
 MB.writeName("SPI_GO", 1)
 -- Initialize receive array to all 0
 local rxdata = {}
 rxdata[1] = 0x00
 rxdata[2] = 0x00
--- SPI_DATA_RX address is 5050, type is 99
-rxdata, error = MB.RA(5050, 99, numbytes)
+rxdata, error = MB.readNameArray("SPI_DATA_RX",numbytes)
 print("ADXL345 device ID: ", rxdata[2])
 -- Configure output data rate power mode for 800Hz, since clock is 1MHz
 -- Write to BW_RATE (0x2C)
 txdata[1] = 0x2C
 -- Rate code is 0x0D=1101=800Hz
 txdata[2] = 0x0D
---SPI_DATA_TX
-error = MB.WA(5010, 99, numbytes, txdata)
+error = MB.writeNameArray("SPI_DATA_TX", numbytes, txdata)
 MB.writeName("SPI_GO", 1)
 -- Write to POWER_CTL (0x2D)
 txdata[1] = 0x2D
 -- Set Wakeup bit (bit 3)
 txdata[2] = 0x08
---SPI_DATA_TX
-error = MB.WA(5010, 99, numbytes, txdata)
+error = MB.writeNameArray("SPI_DATA_TX", numbytes, txdata)
 MB.writeName("SPI_GO", 1)
 -- Set to full resolution (resolution increases with g range)
 txdata[1] = 0x31
 txdata[2] = 0x08
-error = MB.WA(5010, 99, numbytes, txdata)
+error = MB.writeNameArray("SPI_DATA_TX", numbytes, txdata)
 MB.writeName("SPI_GO", 1)
 --Bypass FIFO mode
 -- Write to FIFO_CTL (0x38)
 txdata[1] = 0x38
 -- Disable everything FIFO
 txdata[2] = 0x00
-error = MB.WA(5010, 99, numbytes, txdata)
+error = MB.writeNameArray("SPI_DATA_TX", numbytes, txdata)
 MB.writeName("SPI_GO", 1)
 -- Configure a 500ms interval
 LJ.IntervalConfig(0, 500)
@@ -126,7 +122,7 @@ while true do
     txdata[6] = 0x00
     txdata[7] = 0x00
     MB.writeName("SPI_NUM_BYTES", numbytes)
-    error = MB.WA(5010, 99, numbytes, txdata)
+    error = MB.writeNameArray("SPI_DATA_TX", numbytes, txdata)
     MB.writeName("SPI_GO", 1)
     -- Initialize receive array to all 0 then recieve bytes
     rxdata[1] = 0x00
@@ -136,7 +132,7 @@ while true do
     rxdata[5] = 0x00
     rxdata[6] = 0x00
     rxdata[7] = 0x00
-    rxdata, error = MB.RA(5050, 99, numbytes)
+    rxdata, error = MB.readNameArray("SPI_DATA_RX",numbytes)
     print("X0: ", rxdata[2])
     print("X1: ", rxdata[3])
     print("Y0: ", rxdata[4])

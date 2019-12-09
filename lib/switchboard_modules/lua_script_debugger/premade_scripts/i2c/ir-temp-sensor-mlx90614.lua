@@ -35,6 +35,8 @@ local SLAVE_ADDRESS = 0x5a
 print("-------")
 print("/*Connect a MLX90614 with SCL on EIO4 and SDA on EIO5*/")
 print("")
+-- Disable truncation warnings (truncation should not be a problem in this script)
+MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Use EIO4 for SCL
 local sclpin = 12
 -- Use EIO5 for SDA
