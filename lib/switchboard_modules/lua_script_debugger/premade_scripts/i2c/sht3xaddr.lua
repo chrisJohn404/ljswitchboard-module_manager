@@ -18,12 +18,11 @@
 local SLAVE_ADDRESS = 0x44
 -- configure I2C options with the SHT3x sensor
 -- SDA = EIO5, SCL = EIO4
-MB.writeName("DAC0", 3.3)
 I2C.config(13,12,0,0,SLAVE_ADDRESS, 0)
--- Make sure all device slave addresses are found
 local addrs = I2C.search(0, 127)
 local addrslen = table.getn(addrs)
 local found = 0
+-- Make sure all device slave addresses are found
 for i=1, addrslen do
   if addrs[i] == SLAVE_ADDRESS then
     print(" SHT3x Detected")
@@ -32,13 +31,14 @@ for i=1, addrslen do
 end
 if found ~= 1 then
   print("Slave device not found, stopping program")
-  MB.writeName("LUA_RUN", 0)
+  MB.W(6000, 1, 0)
 end
 
+-- Write the I2C slave address
+MB.W(5104, 0, SLAVE_ADDRESS)
 local data = {}
 local numreads = 0
 local maxreads = 10
-local stage = 0
 -- Configure a 1000ms interval
 local interval = 1000
 LJ.IntervalConfig(0, interval)
@@ -71,4 +71,4 @@ while numreads < maxreads do
 end
 
 -- Writing a 0 to LUA_RUN stops the script
-MB.writeName("LUA_RUN", 0)
+MB.W(6000, 1, 0)
