@@ -7,8 +7,6 @@
           This example requires firmware 1.0282 (T7) or 1.0023 (T4)
 --]]
 
--- Disable truncation warnings (truncation is not a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Set interval timer 0 with a 1000ms interval
 LJ.IntervalConfig(0, 1000)
 -- Set interval timer 1 with a 5s interval
@@ -29,4 +27,4 @@ end
 
 print("Exiting Lua Script")
 -- Writing 0 to LUA_RUN stops the script
-MB.writeName("LUA_RUN", 0)
+MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
