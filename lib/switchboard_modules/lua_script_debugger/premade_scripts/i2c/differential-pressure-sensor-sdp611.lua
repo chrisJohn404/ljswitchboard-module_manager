@@ -11,7 +11,6 @@
           needs to clock stretch for ~4.5ms. The clock needs to be ~20kHz or slower.
 --]]
 
-
 -------------------------------------------------------------------------------
 -- Desc: This function will convert the binary values from the SDP611 to a
 --       pressure. The binary data consists of two bytes which must be joined
