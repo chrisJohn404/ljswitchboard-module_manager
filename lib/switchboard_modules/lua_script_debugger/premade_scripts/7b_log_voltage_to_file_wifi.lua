@@ -17,27 +17,25 @@
 --]]
 
 print("Log voltage to file.  Voltage measured on AIN1 every 50ms.  Store values every 5 seconds")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Get info on the hardware that is installed
-local hardware = MB.readName("HARDWARE_INSTALLED")
+local hardware = MB.readNameArray("HARDWARE_INSTALLED", 2, 0)
 local passed = 1
-if(bit.band(hardware, 8) ~= 8) then
+if(bit.band(hardware[2], 8) ~= 8) then
   print("uSD card not detected")
   passed = 0
 end
-if(bit.band(hardware, 4) ~= 4) then
+if(bit.band(hardware[2], 4) ~= 4) then
   print("RTC module not detected")
   passed = 0
 end
-if(bit.band(hardware, 2) ~= 2) then
+if(bit.band(hardware[2], 2) ~= 2) then
   print("Wifi module not detected")
   passed = 0
 end
 if(passed == 0) then
   print("This Lua script requires an RTC module, Wifi, and a microSD card, but one or many are not detected. These features are only preinstalled on the T7-Pro. Script Stopping")
   -- Writing a 0 to LUA_RUN stops the script
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 
 local filepre = "/FWi_"

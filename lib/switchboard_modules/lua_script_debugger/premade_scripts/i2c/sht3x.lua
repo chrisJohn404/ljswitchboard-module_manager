@@ -16,6 +16,7 @@
 
 -- Depending on the sensor circuitry, the default slave address could be 0x45
 local SLAVE_ADDRESS = 0x44
+
 -- configure I2C options with the SHT3x sensor
 -- SDA = EIO5, SCL = EIO4
 MB.writeName("DAC0", 3.3)
@@ -32,7 +33,7 @@ for i=1, addrslen do
 end
 if found ~= 1 then
   print("Slave device not found, stopping program")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 
 local data = {}
@@ -71,4 +72,4 @@ while numreads < maxreads do
 end
 
 -- Writing a 0 to LUA_RUN stops the script
-MB.writeName("LUA_RUN", 0)
+MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)

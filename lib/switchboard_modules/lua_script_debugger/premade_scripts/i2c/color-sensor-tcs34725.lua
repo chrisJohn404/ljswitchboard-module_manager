@@ -21,8 +21,6 @@
 
 local SLAVE_ADDRESS = 0x29
 
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Configure the I2C Bus
 I2C.config(13, 12, 65516, 0, SLAVE_ADDRESS, 0)
 -- Turn the LED on
@@ -40,7 +38,7 @@ for i=1, addrslen do
 end
 if found == 0 then
   print("No I2C Slave detected, program stopping")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 -- Turn the LED on
 MB.writeName("FIO6", 1)

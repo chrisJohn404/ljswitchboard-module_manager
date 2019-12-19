@@ -19,9 +19,6 @@
 print("Example for servo motor using PWM output.")
 
 local roll = 25000
-local rolltable = {}
-rolltable[1] = roll / 256
-rolltable[2] = roll - rolltable[1]*256
 -- Duty cycle as a percentage
 local dutycycle = 10
 print("duty cycle:", dutycycle)
@@ -30,7 +27,7 @@ MB.writeName("DIO_EF_CLOCK0_ENABLE", 0)
 -- Configure the clock 0 divisor
 MB.writeName("DIO_EF_CLOCK0_DIVISOR", 8)
 -- Write the clock 0 roll value as 2 UINT16s to avoid potential truncation
-MB.writeNameArray("DIO_EF_CLOCK0_ROLL_VALUE", 2, rolltable, 0)
+MB.writeNameArray("DIO_EF_CLOCK0_ROLL_VALUE", 2, {0, roll}, 0)
 -- Enable clock 0
 MB.writeName("DIO_EF_CLOCK0_ENABLE", 1)
 local pinoffset = 0

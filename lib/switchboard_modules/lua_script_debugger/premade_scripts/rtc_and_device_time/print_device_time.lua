@@ -20,17 +20,21 @@
           This example requires firmware 1.0282
 --]]
 
+local function u16s_to_u32(valarray)
+  myval = valarray[1]*256+valarray[2]
+  return myval
+end
+
+
 print("Read the real-time-clock RTC, print the timestamp.")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Read the HARDWARE_INSTALLED register to get the RTC module status
-local hardware = MB.readName("HARDWARE_INSTALLED")
+local hardware = u16s_to_u32(MB.readNameArray("HARDWARE_INSTALLED", 2, 0))
 -- The third bit in hardware correlates to the RTC module status
 -- If this third bit is not 1, the RTC module is not installed, exit the script
 if(bit.band(hardware, 4) ~= 4) then
   print("This Lua script requires a Real-Time Clock (RTC), but an RTC is not detected. These modules are only preinstalled on the T7-Pro, and cannot be added to the T7 or T4. Stopping Script")
   -- Write a 0 to LUA_RUN to stop the script
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN", 2, {0, 0}, 0)
 end
 
 -- Array of UINT16 time data

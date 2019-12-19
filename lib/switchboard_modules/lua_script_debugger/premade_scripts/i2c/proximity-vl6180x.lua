@@ -46,8 +46,6 @@ si[28] = {0x01, 0xa7, 0x1f}
 si[29] = {0x00, 0x30, 0x00}
 -- Configure the I2C Bus
 I2C.config(13, 12, 65516, 0, SLAVE_ADDRESS, 0)
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 local addrs = I2C.search(0, 127)
 local addrslen = table.getn(addrs)
 local found = 0
@@ -61,7 +59,7 @@ for i=1, addrslen do
 end
 if found == 0 then
   print("No I2C Slave detected, program stopping")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 local errorout = 0
 --send the necessary initialization bytes to the slave

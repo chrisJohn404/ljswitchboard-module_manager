@@ -100,8 +100,6 @@ end
 
 
 print ("T4 SPI Mode Testing Example")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 spi = spiutils
 -- Use DIO8 for chip select
 local cs=8
@@ -164,4 +162,4 @@ rxstring = spi.transfer_string(spi, txstring)
 print("Received String: "..rxstring)
 
 -- Write 0 to LUA_RUN to stop the script
-MB.writeName("LUA_RUN", 0)
+MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)

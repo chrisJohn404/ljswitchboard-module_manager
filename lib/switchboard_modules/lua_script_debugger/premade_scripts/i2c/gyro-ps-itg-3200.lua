@@ -27,8 +27,6 @@ end
 
 SLAVE_ADDRESS = 0x69
 
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Configure the I2C Bus
 I2C.config(13, 12, 65516, 0, SLAVE_ADDRESS, 0)
 addrs = I2C.search(0, 127)
@@ -44,7 +42,7 @@ for i=1, addrsLen do
 end
 if found == 0 then
   print("No I2C Slave detected, program stopping")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 -- Initialize the sensor
 I2C.write({0x15, 0x00})

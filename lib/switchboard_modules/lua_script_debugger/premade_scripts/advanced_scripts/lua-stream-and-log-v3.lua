@@ -24,25 +24,29 @@ function applycal(b)
   return v
 end
 
+local function u16s_to_u32(valarray)
+  myval = valarray[1]*256+valarray[2]
+  return myval
+end
+
+
 print("Stream and log AIN0 at 4kS/s to file, nominal cal constants")
--- Disable truncation warnings (truncation is not a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 strdate = ""
 -- Check what hardware is installed
-local hardware = MB.readName("HARDWARE_INSTALLED")
+local hardware = MB.readNameArray("HARDWARE_INSTALLED", 2, 0)
 local passed = 1
-if(bit.band(hardware, 8) ~= 8) then
+if(bit.band(hardware[2], 8) ~= 8) then
   print("uSD card not detected")
   passed = 0
 end
-if(bit.band(hardware, 4) ~= 4) then
+if(bit.band(hardware[2], 4) ~= 4) then
   print("RTC module not detected")
   passed = 0
 end
 if(passed == 0) then
   print("This Lua script requires an RTC module and a microSD card, but one or both are not detected. These features are only preinstalled on the T7-Pro. Script Stopping")
   -- Writing 0 to LUA_RUN stops the script
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 local table = {}
 table[1] = 0
@@ -68,7 +72,7 @@ if file then
 else
   -- If the file was not opened properly we probably have a bad SD card.
   print("!! Failed to open file on uSD Card !!", filename)
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 local streamread = 0
 local maxreads = 1000
@@ -79,9 +83,9 @@ MB.writeName("FIO1", 0)
 -- Make sure analog is on
 MB.writeName("POWER_AIN", 1)
 -- Make sure streaming is not enabled
-local streamrunning = MB.readName("STREAM_ENABLE")
-if streamrunning == 1 then
-  MB.writeName("STREAM_ENABLE", 0)
+local streamrunning = MB.readNameArray("STREAM_ENABLE", 2, 0)
+if u16s_to_u32(streamrunning) == 1 then
+  MB.writeNameArray("STREAM_ENABLE", 2, {0, 0}, 0)
 end
 -- Use +-10V for the AIN range
 MB.writeName("AIN_ALL_RANGE", 10)
@@ -89,25 +93,26 @@ MB.writeName("AIN_ALL_RANGE", 10)
 MB.writeName("STREAM_SCANRATE_HZ", 4000)
 print(string.format("Scanrate %.8f",MB.readName("STREAM_SCANRATE_HZ")))
 -- Use 1 channel for streaming
-MB.writeName("STREAM_NUM_ADDRESSES", 1)
+MB.writeNameArray("STREAM_NUM_ADDRESSES", 2, {0, 1}, 0)
 -- Enforce a 1uS settling time
 MB.writeName("STREAM_SETTLING_US", 1)
 -- Use the default stream resolution
-MB.writeName("STREAM_RESOLUTION_INDEX", 0)
+MB.writeNameArray("STREAM_RESOLUTION_INDEX", 2, {0, 0}, 0)
 -- Use a 1024 byte buffer size (must be a power of 2)
-MB.writeName("STREAM_BUFFER_SIZE_BYTES", 2^11)
+MB.writeNameArray("STREAM_BUFFER_SIZE_BYTES", 2, {0, 2^10}, 0)
 -- Use command-response mode (0b10000=16)
-MB.writeName("STREAM_AUTO_TARGET", 16)
+MB.writeNameArray("STREAM_AUTO_TARGET", 2, {0, 16}, 0)
 -- Run continuously (can be limited)
-MB.writeName("STREAM_NUM_SCANS", 0)
+MB.writeNameArray("STREAM_NUM_SCANS", 2, {0, 0}, 0)
 -- Scan AIN0
-MB.writeName("STREAM_SCANLIST_ADDRESS0", 0)
+MB.writeNameArray("STREAM_SCANLIST_ADDRESS0", 2, {0, 0}, 0)
 -- Start the stream
-MB.writeName("STREAM_ENABLE", 1)
+MB.writeNameArray("STREAM_ENABLE", 2, {0, 1}, 0)
 -- configure a 5ms interval
 LJ.IntervalConfig(0, 5)
 local running = true
 local numinbuffer = 1
+
 while running do
   -- If an interval is done
   if LJ.CheckInterval(0) then
@@ -140,7 +145,7 @@ while running do
   end
   if (streamread > maxreads) then
      -- Stop the stream
-    MB.writeName("STREAM_ENABLE", 0)
+    MB.writeNameArray("STREAM_ENABLE", 2, {0, 0}, 0)
     running = false
   end
 end
@@ -149,5 +154,4 @@ MB.writeName("FIO0", 0)
 MB.writeName("FIO1", 0)
 file:close()
 print("Finishing Script", datawritten, filecount, filename)
-MB.writeName("LUA_RUN", 0)
-
+MB.writeNameArray("LUA_RUN", 2, {0, 0}, 0)

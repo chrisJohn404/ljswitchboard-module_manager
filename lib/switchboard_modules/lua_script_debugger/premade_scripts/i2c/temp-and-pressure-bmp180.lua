@@ -43,7 +43,7 @@ for i=1, addrslen do
 end
 if found == 0 then
   print("No I2C Slave detected, program stopping")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 -- Initialize the slave
 I2C.write({0xF4, 0x2E})

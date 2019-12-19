@@ -24,8 +24,6 @@ print("Transfer an array of ordered information to/from an external computer usi
 -- add this USER_RAM_FIFO1_DATA_F32 register to the active watch area, and
 -- view each element coming out in sequence at the update rate of the software.
 
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 local f32out= {}
 f32out[1] = 10.0
 f32out[2] = 20.1
@@ -37,11 +35,12 @@ local numvalsfio0 = 5
 local numvalsfio1 = 5
 local bytesperval = 4
 local fifo0bytes = numvalsfio0*bytesperval
+local numbytesarr0 = {256*fifo0bytes}
 local fifo1bytes = numvalsfio1*bytesperval
 -- Allocate 20 bytes for FIFO0 by writing to USER_RAM_FIFO0_NUM_BYTES_IN_FIFO
-MB.writeName("USER_RAM_FIFO0_ALLOCATE_NUM_BYTES", fifo0bytes)
+MB.writeNameArray("USER_RAM_FIFO0_ALLOCATE_NUM_BYTES", 2, {0, fifo0bytes}, 0)
 -- Allocate 20 bytes for FIFO1 by writing to USER_RAM_FIFO1_NUM_BYTES_IN_FIFO
-MB.writeName("USER_RAM_FIFO1_ALLOCATE_NUM_BYTES", fifo1bytes)
+MB.writeNameArray("USER_RAM_FIFO1_ALLOCATE_NUM_BYTES", 2, {0, fifo1bytes}, 0)
 -- Configure an interval of 2000ms
 LJ.IntervalConfig(0, 2000)
 
@@ -51,7 +50,7 @@ while true do
     -- Write to FIFO0 for the host computer to access
     for i=1, numvalsfio0 do
       outval = f32out[i]
-      currentbytesfifo0 = MB.readName("USER_RAM_FIFO0_NUM_BYTES_IN_FIFO")
+      local currentbytesfifo0 = MB.readNameArray("USER_RAM_FIFO0_NUM_BYTES_IN_FIFO", 2, 0)[2]
       -- If there are less bytes in FIFO0 than we allocated for, send a new
       -- array of size numvalsfio0 to the host
       if (currentbytesfifo0 < fifo0bytes) then
@@ -64,7 +63,7 @@ while true do
 
     --read in new data from the host with FIFO1
     --Note that an external computer must have previously written to FIFO1
-    currentbytesfifo1 = MB.readName("USER_RAM_FIFO1_NUM_BYTES_IN_FIFO")
+    local currentbytesfifo1 = MB.readNameArray("USER_RAM_FIFO1_NUM_BYTES_IN_FIFO", 2, 0)[2]
     if (currentbytesfifo1 == 0) then
       print ("FIFO1 buffer is empty.")
     end

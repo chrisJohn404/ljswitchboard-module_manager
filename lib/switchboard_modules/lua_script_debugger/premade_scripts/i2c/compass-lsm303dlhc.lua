@@ -44,7 +44,7 @@ for i=1, addrsLen do
 end
 if found == 0 then
   print("No I2C Slave detected, program stopping")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 -- Data Output Rate set (30Hz), disable temp sensor
 I2C.write({0x00, 0x14})

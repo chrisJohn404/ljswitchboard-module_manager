@@ -14,8 +14,6 @@
 --]]
 
 print("Get the GPS latitude & longitude from a FGPMMOPA6H Adafruit GPS Module.")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 local data = {}
 local temp = 0
 local temp2 = ""
@@ -26,7 +24,7 @@ local stringresult = ""
 MB.writeName("ASYNCH_ENABLE", 0)
 -- 4800,9600,14400,19200,38400,57600,115200
 -- BAUD 9600 is the default of FGPMMOPA6H
-MB.writeName("ASYNCH_BAUD", 9600)
+MB.writeNameArray("ASYNCH_BAUD", 2, {0, 9600}, 0)
 local devtype = MB.readName("PRODUCT_ID")
 -- If using a T7
 if devtype == 7 then

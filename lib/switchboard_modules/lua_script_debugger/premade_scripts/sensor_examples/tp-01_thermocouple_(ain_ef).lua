@@ -17,25 +17,23 @@
 --]]
 
 print("Grab the temperature from a TP-01 thermocouple.")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Check that this is a T7
 local devtype = MB.readName("PRODUCT_ID")
 if devtype == 4 then
 	print("This script is compatable only with T7 devices. Check T4 documentation for Thermocouple capability.")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 
 -- Ensure analog system is powered on
 MB.writeName("POWER_AIN", 1)
 -- AIN1_EF_INDEX set to 22 (type K)
-MB.writeName("AIN1_EF_INDEX", 22)
+MB.writeNameArray("AIN1_EF_INDEX", 2, {0, 22}, 0)
 -- Use the ±0.1V AIN1 range
 MB.writeName("AIN1_RANGE", 0.1)
 -- Set the AIN resolution index to 0 (auto)
 MB.writeName("AIN1_RESOLUTION_INDEX", 0)
 -- Set AIN1_EF_CONFIG_A to deg K (1=degC, 2=degF)
-MB.writeName("AIN1_EF_CONFIG_A", 0)
+MB.writeNameArray("AIN1_EF_CONFIG_A", 2, {0x00, 0x00}, 0)
 -- Configure a 1000ms interval
 LJ.IntervalConfig(0, 1000)
 

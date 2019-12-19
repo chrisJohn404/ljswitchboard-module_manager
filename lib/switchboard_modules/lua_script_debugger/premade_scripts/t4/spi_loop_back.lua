@@ -98,8 +98,6 @@ function spiutils.calculate_mode(self, cpol, cpha)
 end
 
 
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 print ("T4 SPI Loop-Back Example")
 local spi = spiutils
 -- Use DIO8 for chip select
@@ -123,4 +121,4 @@ print("Transfered String: "..txstring)
 local rxString = spi.transfer_string(spi, txstring)
 print("Received String: "..rxString)
 -- Write 0 to LUA_RUN to stop the script
-MB.writeName("LUA_RUN", 0)
+MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)

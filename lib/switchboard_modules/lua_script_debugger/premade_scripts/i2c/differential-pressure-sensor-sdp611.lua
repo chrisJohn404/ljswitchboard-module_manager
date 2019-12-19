@@ -37,8 +37,6 @@ end
 -- 64 or h40, is default for SDP611 differential pressure sensor
 SLAVE_ADDRESS = 0x40
 
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Configure the I2C Bus
 I2C.config(13, 12, 65200, 0, SLAVE_ADDRESS, 0)
 local addrs = I2C.search(0, 127)
@@ -54,7 +52,7 @@ for i=1, addrsLen do
 end
 if found == 0 then
   print("No I2C Slave detected, program stopping")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 -- Configure an interval of 1000ms
 LJ.IntervalConfig(0, 1000)

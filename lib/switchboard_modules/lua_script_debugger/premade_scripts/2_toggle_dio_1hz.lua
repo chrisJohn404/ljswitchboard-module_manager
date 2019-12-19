@@ -7,11 +7,11 @@
 print("Toggle the digital I/O called FIO3 (FIO5 on T4) at 1 Hz. Generates a 0.5Hz square wave.")
 
 -- Assume the user is using a T7, toggle FIO3
-local outpin = 2003
+local outpin = "FIO3"
 local devtype = MB.readName("PRODUCT_ID")
 -- If the user is actually using a T4, toggle FIO5
 if devtype == 4 then
-  outpin = 2005
+  outpin = "FIO5"
 end
 local diostatus = 0
 -- Configure a 1000ms interval
@@ -31,6 +31,6 @@ while true do
       print(diostatus, "high")
     end
     -- Apply the change to the DIO pin register (toggle on or off)
-    MB.W(outpin, diostatus)
+    MB.writeName(outpin, diostatus)
   end
 end

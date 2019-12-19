@@ -15,11 +15,15 @@
           This example requires firmware 1.0282 (T7) or 1.0023 (T4)
 --]]
 
+local function u16s_to_u32(valarray)
+  myval = valarray[1]*256+valarray[2]
+  return myval
+end
+
+
 print("Log voltage of AIN1 to file every 10 minutes. RTC value checked every 1000ms.")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Get statuses of the device hardware modules
-local hardware = MB.readName("HARDWARE_INSTALLED")
+local hardware = u16s_to_u32(MB.readNameArray("HARDWARE_INSTALLED", 2, 0))
 local passed = 1
 -- The 7th bit of hardware holds the sd card status
 if(bit.band(hardware, 8) ~= 8) then
@@ -33,7 +37,7 @@ if(bit.band(hardware, 4) ~= 4) then
 end
 if(passed == 0) then
   print("This Lua script requires an RTC and a microSD card, but one or both are not detected. These features are only preinstalled on the T7-Pro. Script Stopping.")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN", 2, {0, 0}, 0)
 end
 
 local filepre = "RTWi_"

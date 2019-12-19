@@ -52,18 +52,22 @@ local function get_mac_from_array(arr)
   return s
 end
 
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
+local function u16s_to_u32(valarray)
+  myval = valarray[1]*256+valarray[2]
+  return myval
+end
+
+
 print('')
 print('Device Information:');
 -- Read the SERIAL_NUMBER register
-local serialnum = MB.readName("SERIAL_NUMBER")
+local serialnum = u16s_to_u32(MB.readNameArray("SERIAL_NUMBER", 2, 0))
 print('- Serial Number:',string.format("%d",serialnum))
 local model = ''
 -- Read the PRODUCT_ID register
 local pid = MB.readName("PRODUCT_ID")
 -- Read the HARDWARE_INSTALLED register
-local hwinstalled = MB.readName("HARDWARE_INSTALLED")
+local hwinstalled = u16s_to_u32(MB.readNameArray("HARDWARE_INSTALLED", 2, 0))
 
 if (pid == 4) then
   model = 'T4'
@@ -101,4 +105,4 @@ print('- Device Temperature', string.format("%.2f",devtemp),'(K)')
 print('')
 print("Exiting Lua Script")
 -- Writing 0 to LUA_RUN stops the script
-MB.writeName("LUA_RUN", 0)
+MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)

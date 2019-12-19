@@ -12,20 +12,18 @@
 --]]
 
 print("T4 Basic I/O Example")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Get the device type by reading the PRODUCT_ID register
 local devtype = MB.readName("PRODUCT_ID")
 -- If the user is not using a T4 exit the script
 if devtype ~= 4 then
   print("Device is not a T4")
   -- Write 0 to LUA_RUN to stop the script
-  MB.writeName("LUA_RUN", 0);
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 
 -- Write 0 to the DIO_ANALOG_ENABLE register to configure all FIO lines as
 -- digital I/O
-MB.writeName("DIO_ANALOG_ENABLE", 0x000)
+MB.writeName("DIO_ANALOG_ENABLE", 0x0000)
 
 -- Set up a 1 second interval
 LJ.IntervalConfig(0, 1000)

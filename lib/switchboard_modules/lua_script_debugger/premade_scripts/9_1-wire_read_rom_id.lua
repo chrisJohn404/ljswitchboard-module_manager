@@ -17,8 +17,6 @@
 --]]
 
 print ("Read the ROM ID of a single DS18B20 1-Wire sensor.")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Use the EIO0 (DIO8) register for the data line
 local sensorpin = 8
 -- The sensor registration number stored in ROM is 64-bits, so it requires 4
@@ -46,4 +44,4 @@ print("MW:", rom[1],"UW:", rom[2],"HW:", rom[3],"LW:", rom[4])
 -- acquiring a temperature reading
 
 -- Writing 0 to LUA_RUN stops the script
-MB.writeName("LUA_RUN", 0)
+MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)

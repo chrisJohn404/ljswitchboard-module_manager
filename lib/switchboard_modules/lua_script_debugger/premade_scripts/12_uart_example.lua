@@ -12,8 +12,6 @@
 print("Basic UART example.")
 print("Please connect a jumper wire between FIO0 and FIO1 (FIO4 and FIO5 on T4)")
 print("")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Assume the device being used is a T7, use FIO1 for the RX pin
 local rxpin = 1
 -- Use FIO0 for the TX pin
@@ -30,7 +28,7 @@ end
 --disable ASYNCH during configuration
 MB.writeName("ASYNCH_ENABLE", 0)
 -- Baud Example Options: 4800,9600,14400,19200,38400,57600,115200
-MB.writeName("ASYNCH_BAUD", 9600)
+MB.writeNameArray("ASYNCH_BAUD", 2, {0, 9600}, 0)
 -- Set the RX pin
 MB.writeName("ASYNCH_RX_DIONUM", rxpin)
 -- Set the TX pin
@@ -94,4 +92,4 @@ while running do
 end
 print("Script Finished")
 -- Writing 0 to LUA_RUN stops the script
-MB.writeName("LUA_RUN", 0)
+MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)

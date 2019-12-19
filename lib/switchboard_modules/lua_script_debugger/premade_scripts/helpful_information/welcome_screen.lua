@@ -44,8 +44,6 @@ print("Welcome, please Load an example to get started!")
 -- We ask that if you are having problems please contact us
 -- Send questions and feedback to support@labjack.com
 
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 print("Exiting Lua Script")
 -- Writing 0 to LUA_RUN stops the script
-MB.writeName("LUA_RUN", 0)
+MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)

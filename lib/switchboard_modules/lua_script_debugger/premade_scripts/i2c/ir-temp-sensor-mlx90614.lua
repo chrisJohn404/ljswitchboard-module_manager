@@ -35,8 +35,6 @@ local SLAVE_ADDRESS = 0x5a
 print("-------")
 print("/*Connect a MLX90614 with SCL on EIO4 and SDA on EIO5*/")
 print("")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Use EIO4 for SCL
 local sclpin = 12
 -- Use EIO5 for SDA
@@ -50,7 +48,7 @@ local addrslen = table.getn(addrs)
 local found = 0
 if addrslen == 0 then
   print("No I2C Slaves detected, program stopping")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 -- Verify that the target device was found
 found = 0
@@ -63,7 +61,7 @@ for i=1, addrslen do
 end
 if found == 0 then
   print("No I2C Slave detected, program stopping")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 print(string.format('Num Found Addresses %d', table.getn(addrs)))
 for key,val in pairs(addrs) do print(string.format('%d: 0x%x, %d (dec)',key,val,val)) end

@@ -9,25 +9,23 @@
 --]]
 
 print("Log voltage to file.  Voltage measured on AIN1.  Store value every 1 second for 10 seconds")
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Read information about the hardware installed
-local hardware = MB.readName("HARDWARE_INSTALLED")
+local hardware = MB.readNameArray("HARDWARE_INSTALLED", 2, 0)
 local passed = 1
--- If the seventh bit is not a 1 then an SD card is not installed
-if(bit.band(hardware, 8) ~= 8) then
+-- If the fourth bit is not a 1 then an SD card is not installed
+if(bit.band(hardware[2], 8) ~= 8) then
   print("uSD card not detected")
   passed = 0
 end
--- If the fourth bit is not a 1 then there is no RTC installed
-if(bit.band(hardware, 4) ~= 4) then
+-- If the third bit is not a 1 then there is no RTC installed
+if(bit.band(hardware[2], 4) ~= 4) then
   print("RTC module not detected")
   passed = 0
 end
 if(passed == 0) then
   print("This Lua script requires an RTC module and a microSD card, but one or both are not detected. These features are only preinstalled on the T7-Pro. Script Stopping")
   -- Writing a 0 to LUA_RUN stops the script
-  MB.W("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 
 local filename = "/log1.csv"
@@ -90,4 +88,4 @@ local line = file:read("*all")
 file:close()
 print(line)
 print("Finished Script")
-MB.W(6000, 1, 0);
+MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)

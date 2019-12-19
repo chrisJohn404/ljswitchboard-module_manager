@@ -25,8 +25,6 @@ local lastwf = 0
 local lastws = 0
 local lastwa = 0
 local lastwo = 0
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 -- Initialize IO memory
 MB.writeName("USER_RAM0_F32", scanfreq)
 MB.writeName("USER_RAM1_F32", wavefreq)
@@ -34,13 +32,13 @@ MB.writeName("USER_RAM2_F32", waveshape)
 MB.writeName("USER_RAM3_F32", waveamp)
 MB.writeName("USER_RAM4_F32", waveoff)
 -- Ensure stream out is off
-MB.writeName("STREAM_OUT0_ENABLE", 0)
+MB.writeNameArray("STREAM_OUT0_ENABLE", 2, {0, 0}, 0)
 -- Set the stream out target to DAC0
-MB.writeName("STREAM_OUT0_TARGET", 1000)
+MB.writeNameArray("STREAM_OUT0_TARGET", 2, {0, 1000}, 0)
 -- Set the buffer size
-MB.writeName("STREAM_OUT0_BUFFER_ALLOCATE_NUM_BYTES", buffsize)
+MB.writeNameArray("STREAM_OUT0_BUFFER_ALLOCATE_NUM_BYTES", 2, {0, buffsize}, 0)
 -- Enable stream out
-MB.writeName("STREAM_OUT0_ENABLE", 1)
+MB.writeNameArray("STREAM_OUT0_ENABLE", 2, {0, 1}, 0)
 -- Configure an interval for how often to check for updates
 LJ.IntervalConfig(0, 1000)
 -- Configure an interval to limit debugging output rates
@@ -58,8 +56,8 @@ while true do
     if scanfreq ~= lastssf then
       -- Disable the stream if it is on
       -- Always disabling stream is an option, but will it throw an error
-      if MB.readName("STREAM_ENABLE") ~= 0 then
-        MB.writeName("STREAM_ENABLE", 0)
+      if MB.readNameArray("STREAM_ENABLE", 2, 0)[2] ~= 0 then
+        MB.writeNameArray("STREAM_OUT0_ENABLE", 2, {0, 0}, 0)
         print("Updating scan rate")
       end
     end
@@ -111,32 +109,32 @@ while true do
         MB.writeName("STREAM_OUT0_BUFFER_F32", dataset[i])
       end
       -- Set the number of points to loop
-      MB.writeName("STREAM_OUT0_LOOP_NUM_VALUES", npoints)
+      MB.writeNameArray("STREAM_OUT0_LOOP_NUM_VALUES", 2, {0, npoints}, 0)
       -- Begin using the recently loaded data set.
-      MB.writeName("STREAM_OUT0_SET_LOOP", 1)
+      MB.writeNameArray("STREAM_OUT0_SET_LOOP", 2, {0, 1}, 0)
     end
     -- If stream is off because this is the first run or changing scanFreq
-    if MB.readName("STREAM_ENABLE") == 0 then
+    if MB.readNameArray("STREAM_ENABLE", 2, 0)[2] == 0 then
       -- Set scan rate
       MB.writeName("STREAM_SCANRATE_HZ", scanfreq)
       -- 1 Channel per scan
-      MB.writeName("STREAM_NUM_ADDRESSES", 1)
+      MB.writeNameArray("STREAM_NUM_ADDRESSES", 2, {0, 1}, 0)
       -- Automatic Settling
       MB.writeName("STREAM_SETTLING_US", 0)
       -- Automatic Resolution
-      MB.writeName("STREAM_RESOLUTION_INDEX", 0)
+      MB.writeNameArray("STREAM_RESOLUTION_INDEX", 2, {0, 0}, 0)
       -- Use a small buffer, because we do not care about any data.
-      MB.writeName("STREAM_BUFFER_SIZE_BYTES", 256)
+      MB.writeNameArray("STREAM_BUFFER_SIZE_BYTES", 2, {0, 256}, 0)
         -- No advanced clocking options
-      MB.writeName("STREAM_CLOCK_SOURCE", 0)
+      MB.writeNameArray("STREAM_CLOCK_SOURCE", 2, {0x00, 0x00}, 0)
       -- No advanced targets
-      MB.writeName("STREAM_AUTO_TARGET", 0)
+      MB.writeNameArray("STREAM_AUTO_TARGET", 2,{0x00, 0x00}, 0)
       -- Continuous operation; disable burst.
-      MB.writeName("STREAM_NUM_SCANS", 0)
+      MB.writeNameArray("STREAM_NUM_SCANS", 2, {0, 0}, 0)
       -- Add channel 4800 (StreamOut 0)
-      MB.writeName("STREAM_SCANLIST_ADDRESS0", 4800)
+      MB.writeNameArray("STREAM_SCANLIST_ADDRESS0", 2, {0, 4800}, 0)
       -- Start stream
-      MB.writeName("STREAM_ENABLE", 1)
+      MB.writeNameArray("STREAM_OUT0_ENABLE", 2, {0, 1}, 0)
     end
     lastssf = scanfreq
     lastwf = wavefreq

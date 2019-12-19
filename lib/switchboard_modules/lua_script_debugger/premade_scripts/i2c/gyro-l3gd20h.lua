@@ -29,8 +29,6 @@ SLAVE_ADDRESS = 0x6B
 
 --Configure the I2C Bus
 I2C.config(13, 12, 65516, 0, SLAVE_ADDRESS, 0)
--- Disable truncation warnings (truncation should not be a problem in this script)
-MB.writeName("LUA_NO_WARN_TRUNCATION", 1)
 local addrs = I2C.search(0, 127)
 local addrslen = table.getn(addrs)
 local found = 0
@@ -44,7 +42,7 @@ for i=1, addrslen do
 end
 if found == 0 then
   print("No I2C Slave detected, program stopping")
-  MB.writeName("LUA_RUN", 0)
+  MB.writeNameArray("LUA_RUN",2,{0, 0}, 0)
 end
 -- Write CTRL2, disable filtering
 I2C.write({0x21, 0x00})
