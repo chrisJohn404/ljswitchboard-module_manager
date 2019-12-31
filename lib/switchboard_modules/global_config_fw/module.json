@@ -3,7 +3,12 @@
     "humanName": "Global Configuration",
     "version": "0.0.1",
     "framework":"multipleDevices",
-    "supportedDevices": [{"type":"T8"},{"type":"T7"},{"type":"T5"},{"type":"T4"}],
+    "supportedDevices": [
+        {"type":"T7","minFW":"0.1"},
+        {"type":"T4","minFW":"0.1"},
+        {"type":"T5","minFW":"1.0000"},
+        {"type":"T8","minFW":"1.0000"}
+    ],
     "jsFiles": [
     ],
     "htmlFiles": [

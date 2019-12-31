@@ -5,8 +5,8 @@
     "supportedDevices": [
     	{"type":"T7","minFW":"1.0078"},
     	{"type":"T4","minFW":"0.2000"},
-    	{"type":"T5","minFW":"0.2000"},
-    	{"type":"T8","minFW":"0.2000"}
+    	{"type":"T5","minFW":"10.0000"},
+    	{"type":"T8","minFW":"0.9000"}
     ],
     "framework":"singleDevice",
     "jsFiles":["luaDeviceController.js", "aceTextEditor.js"]
